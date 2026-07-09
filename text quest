@@ -1,255 +1,134 @@
 import random
-print('Участники команды Stray kids ищут в заброшенном замке строчки от их ране написанных песен и хочет выбраться, пока его не нашли злоумышлиники.')
-print('Играть нужно за участников команды Stray kids. Они потерял текст своей песни и не могут выбраться из замка. Противостоят им хейторы, которые хотят уничтожить к-поп.')
+import sys
+
+def safe_input(prompt=""):
+    try:
+        return input(prompt)
+    except EOFError:
+        # Если ввода нет — возвращаем пустую строку, чтобы программа не падала
+        return ""
+
+print('Участники команды Stray Kids ищут в заброшенном замке строчки от их ранее написанных песен и хотят выбраться, пока их не нашли злоумышленники.')
+print('Играть нужно за участников команды Stray Kids. Они потеряли текст своей песни и не могут выбраться из замка. Противостоят им хейтеры, которые хотят уничтожить к-поп.')
 print('У замка один этаж. Это прямоугольник 1 на 2, всего 2 комнаты. Из любой комнаты можно перейти в соседнюю.')
-print('Выберете действие,с которого вы хотите начать игру. Действия которые может выполнять Чонгук: перемещение, атака, побег, поиск улик.')
-print('Выберете кол-во монстров в комнате, в которую вы отправитесь.')
-a = input()
-b = int(input())
-if a == 'атака':
-    if b != 0:
-        print('бьюсь с монстрами')
-    else:
-        print('Атаковать некого. Комната пуста.')
-elif a == 'перемещение' or a == 'поиск улик':
-    if b != 0:
-        a == 'побег'
-        if a == 'перемещение' or a == 'поиск улик':
-            print('убегаю')
-    elif b == 0:
-        if a == 'перемещение':
-            print('хожу')
-        elif a == 'поиск улик':
-            print('обыскиваю комнату')
-if a == 'атака' and b != 0:
-    hero_hp = random.randint(1, 16)
-    hero_punch = random.randint(1, 16)
-    monster_hp = random.randint(1, 16)
-    monster_punch = random.randint(1, 16)
-    while hero_hp > 0 and monster_hp > 0:
-        monster_hp = monster_hp - hero_punch
-        if monster_hp <= 0:
-            monster_hp = 0
-            print('Герой наносит удар. Здоровье монстра: 0')
-        else:
-            print('Герой наносит удар. Здоровье монстра:', monster_hp)
-            hero_hp = hero_hp - monster_punch
-            if hero_hp < 0:
-                hero_hp = 0
-            print('Монстр наносит удар. Здоровье героя:', hero_hp)
-if a == 'побег' and b != 0:
-    print('выберите 1 или 2 комнату')
-    monster = random.random()
-    room = int(input())
-    if monster > 1:
-        print('Монстр атакует. Жизнь закончилась.')
-    else:
-        if room == 1:
-            print('Вы переместились в комнату 2.')
-        elif room == 2:
-            print('Вы переместились в комнату 1.')
-while a == 'поиск улик' and b != 0:
-    print('Введите пароль, чтобы найти улику. По скрипту - в пароле 6 букв')
-    d = input()
-    if d != 'смерть':
-        print('Упс... У вас есть ещё 2 попытки. Введите любую букву алфавита, чтобы разгадать пароль')
-        r = 'смерть'
-        word = r
-        new_word = ''
-        for i in range(6):
-            print('Попытка', i + 1, 'из 6')
-            letter = input()
-            k = 1
-            flag = False
-            for sym in word:
-                if sym == letter:
-                    print('Буква нашлась на месте', k)
-                    flag = True
-                    new_word += sym
-                k += 1
-            if flag == False:
-                print('Буква не нашлась')
-        print('Попробуйте ещё разок:0/. Введите слово>.')
-        new_word = input()
-        if new_word == word:
-            print('Пароль подошёл!')
-            break
-        else:
-            print('Пароль не подошёл')
-            print('У вас есть шанс. У вас опять 3 попытки>>.')
-    else:
-        print('Молодец, ты нашёл пароль!')
+
+alive = True
+
+while alive:
+    print('Выберите действие, с которого хотите начать ход. Действия, которые могут выполнять участники Stray Kids: перемещение, атака, побег, поиск улик.')
+    print('Выберите количество монстров в комнате, в которую вы отправитесь.')
+    a = safe_input().strip().lower()
+    if a == "":
+        print('Нет ввода. Игра завершается.')
         break
-print('Вы хотите продолжить игру?')
-f = input()
-if f =='ДА' or f == 'Да' or f == 'дА' or f =='да' or f == 'конечно' or f == 'Конечно' or f =='КОНЕЧНО':
-    print('Выберете действие,с которого вы хотите продолжить игру.')
-    print('Действия которые может выполнять Чонгук: перемещение, атака, побег, поиск улик')
-    print('Выберете кол-во монстров в комнате, в которую вы отправитесь.')
-    a = input()
-    b = int(input())
+
+    b_str = safe_input()
+    if b_str == "":
+        print('Нет ввода для количества монстров. Ставлю 0.')
+        b = 0
+    else:
+        try:
+            b = int(b_str)
+            if b < 0:
+                b = 0
+        except ValueError:
+            print('Некорректное число, ставлю 0 монстров.')
+            b = 0
+
     if a == 'атака':
         if b != 0:
-            print('бьюсь с монстрами')
+            print('Команда бьётся с монстрами!')
+
+            hero_hp = random.randint(1, 16)
+            hero_punch = random.randint(1, 16)
+            monster_hp = random.randint(1, 16)
+            monster_punch = random.randint(1, 16)
+
+            while hero_hp > 0 and monster_hp > 0:
+                monster_hp -= hero_punch
+                if monster_hp <= 0:
+                    monster_hp = 0
+                    print('Герой наносит удар. Здоровье монстра: 0')
+                    print('Монстр повержен!')
+                else:
+                    print('Герой наносит удар. Здоровье монстра:', monster_hp)
+                    hero_hp -= monster_punch
+                    if hero_hp < 0:
+                        hero_hp = 0
+                    print('Монстр наносит удар. Здоровье героя:', hero_hp)
+
+            if hero_hp <= 0:
+                alive = False
         else:
             print('Атаковать некого. Комната пуста.')
+
     elif a == 'перемещение' or a == 'поиск улик':
         if b != 0:
-            a == 'побег'
-            if a == 'перемещение' or a == 'поиск улик':
-                print('убегаю')
+            print('В комнате монстры! Сначала нужно либо атаковать, либо попробовать сбежать.')
+            a = 'побег'
         elif b == 0:
             if a == 'перемещение':
-                print('хожу')
+                print('Команда спокойно перемещается по комнате.')
             elif a == 'поиск улик':
-                print('обыскиваю комнату')
-if a == 'атака' and b != 0:
-        hero_hp = random.randint(1, 11)
-        hero_punch = random.randint(1, 11)
-        monster_hp = random.randint(1, 11)
-        monster_punch = random.randint(1, 11)
-        while hero_hp > 0 and monster_hp > 0:
-            monster_hp = monster_hp - hero_punch
-            if monster_hp <= 0:
-                monster_hp = 0
-                print('Герой наносит удар. Здоровье монстра: 0')
-            else:
-                print('Герой наносит удар. Здоровье монстра:', monster_hp)
-                hero_hp = hero_hp - monster_punch
-                if hero_hp < 0:
-                    hero_hp = 0
-                print('Монстр наносит удар. Здоровье героя:', hero_hp)
+                print('Команда обыскивает комнату и находит улику!')
+
     if a == 'побег' and b != 0:
-        print('выберите 1 или 2 комнату')
+        print('Выберите 1 или 2 комнату для побега.')
+        room_str = safe_input()
+        if room_str == "":
+            print('Нет ввода номера комнаты. Попытка побега провалилась.')
+            alive = False
+            continue
+        try:
+            room = int(room_str)
+        except ValueError:
+            print('Неверный ввод. Попытка побега провалилась.')
+            alive = False
+            continue
+
         monster = random.random()
-        room = int(input())
-        if monster > 1:
-            print('Монстр атакует. Жизнь закончилась.')
+        if monster > 0.5:
+            print('Монстр перехватил команду! Жизнь закончилась.')
+            alive = False
         else:
-            if room == 1:
-                print('Вы переместились в комнату номер 2.')
-            elif room == 2:
-                print('Вы переместились в комнату номер 1.')
-    while a == 'поиск улик' and b != 0:
-        print('Введите пароль, чтобы найти улику. По скрипту - в пароле 6 букв')
-        d = input()
-        if d != 'смерть':
-            print('Упс... У вас есть ещё 2 попытки. Введите любую букву алфавита, чтобы разгадать пароль')
-            r = 'смерть'
-            word = r
-            new_word = ''
-            for i in range(6):
-                print('Попытка', i + 1, 'из 6')
-                letter = input()
-                k = 1
-                flag = False
-                for sym in word:
-                    if sym == letter:
-                        print('Буква нашлась на месте', k)
-                        flag = True
-                        new_word += sym
-                    k += 1
-                if flag == False:
-                    print('Буква не нашлась')
-            print('Попробуйте ещё разок:0/. Введите слово>.')
-            new_word = input()
-            if new_word == word:
-                print('Пароль подошёл!')
-            else:
-                print('Пароль не подошёл')
-                print('У вас есть шанс. У вас опять 3 попытки>>.')
-        else:
-            print('Молодец, ты нашёл пароль!')
-            break
-else:
-    print('Игра закончена<>.')
+            next_room = 2 if room == 1 else 1
+            print(f'Побег удался! Команда переместилась в комнату номер {next_room}.')
 
-print('Вы хотите продолжить игру?')
-uio = input()
-if uio =='ДА' or uio == 'Да' or uio == 'дА' or uio =='да' or uio == 'конечно' or uio == 'Конечно' or uio =='КОНЕЧНО':
-    print('Выберете действие,с которого вы хотите продолжить игру.')
-    print('Действия которые могут делать участники команды Stray kids: перемещение, атака, побег, поиск улик')
-    print('Выберете кол-во монстров в комнате, в которую вы отправитесь.')
-    a = input()
-    b = int(input())
-    if a == 'атака':
-        if b != 0:
-            print('бьюсь с монстрами')
-        else:
-            print('Атаковать некого. Комната пуста.')
-    elif a == 'перемещение' or a == 'поиск улик':
-        if b != 0:
-            a == 'побег'
-            if a == 'перемещение' or a == 'поиск улик':
-                print('убегаю')
-        elif b == 0:
-            if a == 'перемещение':
-                print('хожу')
-            elif a == 'поиск улик':
-                print('обыскиваю комнату')
-    if a == 'атака' and b != 0:
-        hero_hp = random.randint(1, 11)
-        hero_punch = random.randint(1, 11)
-        monster_hp = random.randint(1, 11)
-        monster_punch = random.randint(1, 11)
-        while hero_hp > 0 and monster_hp > 0:
-            monster_hp = monster_hp - hero_punch
-            if monster_hp <= 0:
-                monster_hp = 0
-                print('Герой наносит удар. Здоровье монстра: 0')
-            else:
-                print('Герой наносит удар. Здоровье монстра:', monster_hp)
-                hero_hp = hero_hp - monster_punch
-                if hero_hp < 0:
-                    hero_hp = 0
-                print('Монстр наносит удар. Здоровье героя:', hero_hp)
-    if a == 'побег' and b != 0:
-        print('выберите 1 или 2 комнату')
-        monster = random.random()room = int(input())
-        if monster > 1:
-            print('Монстр атакует. Жизнь закончилась.')
-        else:
-            if room == 1:
-                print('Вы переместились в комнату номер 2.')
-            elif room == 2:
-                print('Вы переместились в комнату номер 1.')
-    while a == 'поиск улик' and b != 0:
-        print('Введите пароль, чтобы найти улику. По скрипту - в пароле 6 букв')
-        d = input()
-        if d != 'смерть':
-            print('Упс... У вас есть ещё 2 попытки. Введите любую букву алфавита, чтобы разгадать пароль')
-            r = 'смерть'
-            word = r
-            new_word = ''
-            for i in range(6):
-                print('Попытка', i + 1, 'из 6')
-                letter = input()
-                k = 1
-                flag = False
-                for sym in word:
-                    if sym == letter:
-                        print('Буква нашлась на месте', k)
-                        flag = True
-                        new_word += sym
-                    k += 1
-                if flag == False:
-                    print('Буква не нашлась')
-            print('Попробуйте ещё разок:0/. Введите слово>.')
-            new_word = input()
-            if new_word == word:
-                print('Пароль подошёл!')
-            else:
-                print('Пароль не подошёл')
-                print('У вас есть шанс. У вас опять 3 попытки>>.')
-        else:
-            print('Молодец, ты нашёл пароль!')
-            break
-else:
-    print('Игра закончена<>.')
+    if a == 'поиск улик' and b != 0:
+        print('Чтобы найти улику, нужно ввести пароль (в пароле 6 букв). У вас 3 попытки.')
+        secret = 'смерть'
+        attempts = 3
+        found = False
 
-print('Вы хотите продолжить игру?')
-ich = input()
-if ich =='ДА' or ich == 'Да' or ich == 'дА' or ich =='да' or ich == 'конечно' or ich == 'Конечно' or ich =='КОНЕЧНО':
-    print('УПС... Игра устала. Запустите её заново:>.')
-else:
-    print('Игра закончена<>.')
+        while attempts > 0 and not found:
+            guess = safe_input(f'Попытка {4 - attempts}: введите пароль: ').strip().lower()
+            if guess == "":
+                print('Нет ввода пароля. Попытка считается проваленной.')
+                attempts -= 1
+                continue
+            if guess == secret:
+                print('Пароль подошёл! Команда нашла улику.')
+                found = True
+            else:
+                attempts -= 1
+                if attempts > 0:
+                    print('Неверно. Попробуйте ещё раз.')
+                else:
+                    print('Все попытки исчерпаны. Улика не найдена.')
+
+        if not found:
+            alive = False
+
+    if not alive:
+        print()
+        print('Игра окончена: команда не смогла выбраться.')
+        break
+
+    cont = safe_input('Хотите продолжить игру? (да/нет): ').strip().lower()
+    if cont == "":
+        print('Нет ввода ответа. Игра завершается.')
+        break
+    if cont not in ['да', 'д', 'yes', 'y']:
+        print('Игра закончена.')
+        break
+
